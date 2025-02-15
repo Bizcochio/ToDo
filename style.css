@@ -296,3 +296,154 @@ h1 {
 .task.completed {
   border-color: #888;
 }
+
+/* Кнопка-тоггл корзины в виде иконки */
+#trashToggle {
+  margin: 20px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #f56666bd; /* неоновый красный */
+  font-size: 40px;
+  text-shadow: 0 0 8px #df7272;
+  padding: 0;
+  z-index: 9999;
+  pointer-events: auto;
+}
+#trashToggle:hover {
+  color: #eb6d6de0;
+  text-shadow: 0 0 12px #e06f6f;
+}
+
+/* Контейнер корзины: ширина 420px, растягивается вверх до 50vh */
+#trashContainer {
+  margin-right: 20px;
+  margin-bottom: 50px;
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  width: 420px;
+  max-height: 50vh;
+  overflow-y: auto;
+  background: rgba(15, 15, 15, 0.95);
+  border: 1px solid #0099ff;
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 200;
+}
+
+/* Контейнер для тасков в корзине */
+#trashTasksContainer {
+  margin-bottom: 20px;
+}
+
+/* Сообщение "Корзина пуста" */
+#emptyTrashMessage {
+  text-align: center;
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  margin: 5px 0;
+  color: #999;
+}
+
+/* Контейнер для кнопок внизу корзины */
+#trashButtonsContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+/* Кнопки "Восстановить всё" и "Очистить корзину" */
+#restoreAllBtn,
+#clearTrashBtn {
+  flex: 1;
+  padding: 5px 0;
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  color: white;
+  background-color: #0099ff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+#restoreAllBtn:hover,
+#clearTrashBtn:hover {
+  background-color: #007acc;
+}
+
+/* Таск в корзине: разделен на 2 колонки (сетка) — текст слева, кнопка справа */
+.task.inTrash {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 10px;
+  align-items: center;
+  margin: 5px 0;
+  padding: 5px;
+  border: 1px solid #0099ff;
+  border-radius: 5px;
+  background: transparent;
+}
+
+/* Текст таска */
+.task.inTrash .taskText {
+  font-size: 10px;
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  text-align: left;
+}
+
+/* Скрываем стандартные элементы таска в корзине */
+.task.inTrash .completeTask,
+.task.inTrash .menuButton,
+.task.inTrash .taskMenu,
+.task.inTrash .deleteTask,
+.task.inTrash .editTask {
+  display: none !important;
+}
+
+/* Кнопка "Восстановить" — только в корзине; растягивается пропорционально тексту, но не более 3 строк */
+.restoreTask {
+  display: none !important;
+  font-family: "Press Start 2P", cursive;
+  font-size: 10px;
+  color: white;
+  background-color: #0099ff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  height: 100%;
+  min-height: 24px; /* минимум – примерно 1-2 строки */
+  max-height: 48px; /* максимум – около 3 строк */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.task.inTrash .restoreTask {
+  display: flex !important;
+}
+.task.inTrash .restoreTask:hover {
+  background-color: #007acc;
+}
+
+/* Анимация при удалении таска */
+@keyframes glitchFade {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    transform: translateX(-10px) scale(0.8);
+    opacity: 0;
+  }
+}
+.task.removing {
+  animation: glitchFade 0.3s steps(4) forwards;
+}

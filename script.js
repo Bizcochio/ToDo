@@ -155,3 +155,158 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".task").forEach(setupMenu);
   });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const taskList = document.getElementById("taskList");
+
+  // Создаем кнопку-тоггл корзины в виде иконки
+  const trashToggle = document.createElement("button");
+  trashToggle.id = "trashToggle";
+  trashToggle.innerHTML = '<i class="fas fa-trash"></i>';
+  document.body.appendChild(trashToggle);
+
+  // Создаем контейнер для корзины
+  const trashContainer = document.createElement("div");
+  trashContainer.id = "trashContainer";
+  trashContainer.style.display = "none";
+  document.body.appendChild(trashContainer);
+
+  // В контейнере корзины создаем блок для тасков
+  const trashTasksContainer = document.createElement("div");
+  trashTasksContainer.id = "trashTasksContainer";
+  trashContainer.appendChild(trashTasksContainer);
+
+  // Сообщение "Корзина пуста"
+  const emptyMsg = document.createElement("p");
+  emptyMsg.id = "emptyTrashMessage";
+  emptyMsg.textContent = "Корзина пуста";
+  trashTasksContainer.appendChild(emptyMsg);
+
+  // Контейнер для кнопок внизу корзины
+  const trashButtonsContainer = document.createElement("div");
+  trashButtonsContainer.id = "trashButtonsContainer";
+  trashContainer.appendChild(trashButtonsContainer);
+
+  // Кнопка "Восстановить всё"
+  const restoreAllBtn = document.createElement("button");
+  restoreAllBtn.id = "restoreAllBtn";
+  restoreAllBtn.textContent = "Восстановить всё";
+  trashButtonsContainer.appendChild(restoreAllBtn);
+
+  // Кнопка "Очистить корзину"
+  const clearTrashBtn = document.createElement("button");
+  clearTrashBtn.id = "clearTrashBtn";
+  clearTrashBtn.textContent = "Очистить корзину";
+  trashButtonsContainer.appendChild(clearTrashBtn);
+
+  // Тоггл корзины по клику по иконке
+  trashToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    trashContainer.style.display =
+      trashContainer.style.display === "none" ? "block" : "none";
+  });
+
+  // Закрытие корзины при клике вне её
+  document.addEventListener("click", (e) => {
+    if (
+      trashContainer.style.display === "block" &&
+      !trashContainer.contains(e.target) &&
+      e.target !== trashToggle
+    ) {
+      trashContainer.style.display = "none";
+    }
+  });
+
+  // Обновление UI корзины: показываем сообщение "Корзина пуста", если нет тасков
+  function updateTrashUI() {
+    const tasksInTrash = trashTasksContainer.querySelectorAll(".task.inTrash");
+    emptyMsg.style.display = tasksInTrash.length === 0 ? "block" : "none";
+  }
+
+  // Перемещение таска в корзину
+  function moveToTrash(task) {
+    task.classList.add("removing");
+    setTimeout(() => {
+      task.classList.remove("removing");
+      task.classList.add("inTrash");
+      trashTasksContainer.appendChild(task);
+      updateTrashUI();
+    }, 300);
+  }
+
+  // Восстановление таска из корзины
+  function restoreTask(task) {
+    task.classList.remove("inTrash");
+    taskList.appendChild(task);
+    updateTrashUI();
+  }
+
+  // Обеспечиваем наличие кнопки "Восстановить" в таске (если ее нет, добавляем)
+  function ensureRestoreButton(task) {
+    let restoreBtn = task.querySelector(".restoreTask");
+    if (!restoreBtn) {
+      restoreBtn = document.createElement("button");
+      restoreBtn.classList.add("restoreTask");
+      restoreBtn.textContent = "Восстановить";
+      task.appendChild(restoreBtn);
+      restoreBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        restoreTask(task);
+      });
+    }
+  }
+
+  // Заменяем обработчик "Удалить": теперь таск перемещается в корзину
+  function replaceDeleteEvent(task) {
+    const delBtn = task.querySelector(".deleteTask");
+    if (!delBtn) return;
+    const newDelBtn = delBtn.cloneNode(true);
+    delBtn.parentNode.replaceChild(newDelBtn, delBtn);
+    newDelBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      ensureRestoreButton(task);
+      moveToTrash(task);
+    });
+  }
+
+  // Обрабатываем все существующие таски
+  document.querySelectorAll("#taskList .task").forEach((task) => {
+    replaceDeleteEvent(task);
+  });
+
+  // Следим за новыми тасками (динамически добавляемыми)
+  const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type === "childList") {
+        mutation.addedNodes.forEach((node) => {
+          if (
+            node.nodeType === Node.ELEMENT_NODE &&
+            node.classList.contains("task")
+          ) {
+            replaceDeleteEvent(node);
+          }
+        });
+      }
+    }
+  });
+  observer.observe(taskList, { childList: true });
+
+  // "Восстановить всё" — возвращает все таски из корзины в список
+  restoreAllBtn.addEventListener("click", () => {
+    const tasksInTrash = trashTasksContainer.querySelectorAll(".task.inTrash");
+    tasksInTrash.forEach((task) => {
+      restoreTask(task);
+    });
+  });
+
+  // "Очистить корзину" — удаляет все таски из DOM
+  clearTrashBtn.addEventListener("click", () => {
+    const tasksInTrash = trashTasksContainer.querySelectorAll(".task.inTrash");
+    tasksInTrash.forEach((task) => {
+      task.remove();
+    });
+    updateTrashUI();
+  });
+
+  updateTrashUI();
+});
