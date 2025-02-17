@@ -1,11 +1,236 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const input = document.getElementById("taskInput");
-  const button = document.getElementById("addTask");
-  const taskList = document.getElementById("taskList");
+  // ===================
+  // 0. Глобальные переменные и переводы
+  // ===================
+  let currentLang = localStorage.getItem("selectedLanguage") || "ru";
+
+  const translations = {
+    en: {
+      settingsTitle: "Settings",
+      changeLanguage: "Change Language",
+      addTask: "Add Task",
+      deleteTask: "Delete",
+      editTask: "Edit",
+      restoreTask: "Restore",
+      restoreAll: "Restore All",
+      clearTrash: "Clear All",
+      emptyTrash: "Recycle Bin is empty",
+      taskPlaceholder: "Write your task here...",
+      languages: {
+        ru: "Russian",
+        en: "English",
+        de: "German",
+        cn: "Chinese",
+        jp: "Japanese",
+        fr: "French",
+        es: "Spanish",
+      },
+    },
+    ru: {
+      settingsTitle: "Настройки",
+      changeLanguage: "Сменить язык",
+      addTask: "Добавить задачу",
+      deleteTask: "Удалить",
+      editTask: "Редактировать",
+      restoreTask: "Восстановить",
+      restoreAll: "Восстановить всё",
+      clearTrash: "Очистить корзину",
+      emptyTrash: "Корзина пуста",
+      taskPlaceholder: "Напиши задачу здесь...",
+      languages: {
+        ru: "Русский",
+        en: "Английский",
+        de: "Немецкий",
+        cn: "Китайский",
+        jp: "Японский",
+        fr: "Французский",
+        es: "Испанский",
+      },
+    },
+    de: {
+      settingsTitle: "Einstellungen",
+      changeLanguage: "Sprache ändern",
+      addTask: "Aufgabe hinzufügen",
+      deleteTask: "Löschen",
+      editTask: "Bearbeiten",
+      restoreTask: "Wiederherstellen",
+      restoreAll: "Alle wiederherstellen",
+      clearTrash: "Papierkorb leeren",
+      emptyTrash: "Papierkorb ist leer",
+      taskPlaceholder: "Aufgabe hier eingeben...",
+      languages: {
+        ru: "Russisch",
+        en: "Englisch",
+        de: "Deutsch",
+        cn: "Chinesisch",
+        jp: "Japanisch",
+        fr: "Französisch",
+        es: "Spanisch",
+      },
+    },
+    cn: {
+      settingsTitle: "设置",
+      changeLanguage: "更改语言",
+      addTask: "添加任务",
+      deleteTask: "删除",
+      editTask: "编辑",
+      restoreTask: "恢复",
+      restoreAll: "恢复所有",
+      clearTrash: "清空回收站",
+      emptyTrash: "回收站为空",
+      taskPlaceholder: "在此输入您的任务...",
+      languages: {
+        ru: "俄语",
+        en: "英语",
+        de: "德语",
+        cn: "中文",
+        jp: "日语",
+        fr: "法语",
+        es: "西班牙语",
+      },
+    },
+    jp: {
+      settingsTitle: "設定",
+      changeLanguage: "言語を変更",
+      addTask: "タスクを追加",
+      deleteTask: "削除",
+      editTask: "編集",
+      restoreTask: "復元",
+      restoreAll: "すべて復元",
+      clearTrash: "ゴミ箱を空にする",
+      emptyTrash: "ゴミ箱は空です",
+      taskPlaceholder: "ここにタスクを入力...",
+      languages: {
+        ru: "ロシア語",
+        en: "英語",
+        de: "ドイツ語",
+        cn: "中国語",
+        jp: "日本語",
+        fr: "フランス語",
+        es: "スペイン語",
+      },
+    },
+    fr: {
+      settingsTitle: "Paramètres",
+      changeLanguage: "Changer de langue",
+      addTask: "Ajouter une tâche",
+      deleteTask: "Supprimer",
+      editTask: "Modifier",
+      restoreTask: "Restaurer",
+      restoreAll: "Restaurer tout",
+      clearTrash: "Vider la corbeille",
+      emptyTrash: "La corbeille est vide",
+      taskPlaceholder: "Écrivez votre tâche ici...",
+      languages: {
+        ru: "Russe",
+        en: "Anglais",
+        de: "Allemand",
+        cn: "Chinois",
+        jp: "Japonais",
+        fr: "Français",
+        es: "Espagnol",
+      },
+    },
+    es: {
+      settingsTitle: "Configuración",
+      changeLanguage: "Cambiar idioma",
+      addTask: "Agregar tarea",
+      deleteTask: "Eliminar",
+      editTask: "Editar",
+      restoreTask: "Restaurar",
+      restoreAll: "Restaurar todo",
+      clearTrash: "Vaciar la papelera",
+      emptyTrash: "La papelera está vacía",
+      taskPlaceholder: "Escribe tu tarea aquí...",
+      languages: {
+        ru: "Ruso",
+        en: "Inglés",
+        de: "Alemán",
+        cn: "Chino",
+        jp: "Japonés",
+        fr: "Francés",
+        es: "Español",
+      },
+    },
+  };
+
+  function applyTranslations(lang) {
+    const t = translations[lang];
+    if (!t) return;
+    currentLang = lang;
+
+    // Обновляем заголовок настроек
+    const settingsHeader = document.querySelector(
+      "#settingsDrawer .settingsContent h2"
+    );
+    if (settingsHeader) {
+      settingsHeader.textContent = t.settingsTitle;
+    }
+
+    // Пункт "Сменить язык"
+    const languageToggleText = document.querySelector(
+      "#languageToggle span:first-child"
+    );
+    if (languageToggleText) {
+      languageToggleText.textContent = t.changeLanguage;
+    }
+
+    // Кнопка "Добавить задачу"
+    const addTaskBtn = document.getElementById("addTask");
+    if (addTaskBtn) {
+      addTaskBtn.textContent = t.addTask;
+    }
+
+    // Placeholder поля ввода
+    const taskInput = document.getElementById("taskInput");
+    if (taskInput && t.taskPlaceholder) {
+      taskInput.placeholder = t.taskPlaceholder;
+    }
+
+    // Сообщение в корзине
+    const emptyTrashMsg = document.getElementById("emptyTrashMessage");
+    if (emptyTrashMsg) {
+      emptyTrashMsg.textContent = t.emptyTrash;
+    }
+
+    // Кнопки "Edit", "Delete", "Restore" в существующих задачах
+    document.querySelectorAll(".editTask").forEach((btn) => {
+      btn.textContent = t.editTask;
+    });
+    document.querySelectorAll(".deleteTask").forEach((btn) => {
+      btn.textContent = t.deleteTask;
+    });
+    document.querySelectorAll(".restoreTask").forEach((btn) => {
+      btn.textContent = t.restoreTask;
+    });
+
+    // Кнопки "Restore all" и "Clear all"
+    const restoreAllBtn = document.getElementById("restoreAllBtn");
+    if (restoreAllBtn) {
+      restoreAllBtn.textContent = t.restoreAll;
+    }
+    const clearTrashBtn = document.getElementById("clearTrashBtn");
+    if (clearTrashBtn) {
+      clearTrashBtn.textContent = t.clearTrash;
+    }
+  }
+
+  // Применяем язык при загрузке
+  applyTranslations(currentLang);
+
+  // ===================
+  // 1. ToDo List
+  // ===================
+  const inputField = document.getElementById("taskInput");
+  const addButton = document.getElementById("addTask");
+  const taskListElem = document.getElementById("taskList");
 
   function addTask() {
-    const taskText = input.value.trim();
-    if (taskText === "") return;
+    const taskText = inputField.value.trim();
+    if (!taskText) return;
+
+    // Текущие переводы
+    const t = translations[currentLang] || translations["ru"];
 
     const li = document.createElement("li");
     li.classList.add("task", "fadeIn");
@@ -15,198 +240,141 @@ document.addEventListener("DOMContentLoaded", () => {
       <span class="taskText">${taskText.replace(/\n/g, "<br>")}</span>
       <button class="menuButton"><i class="fas fa-ellipsis-h"></i></button>
       <div class="taskMenu">
-          <button class="editTask">✏️ Edit</button>
-          <button class="deleteTask">🗑️ Delete</button>
+        <button class="editTask">${t.editTask}</button>
+        <button class="deleteTask">${t.deleteTask}</button>
       </div>
     `;
 
-    taskList.appendChild(li);
-    input.value = "";
+    taskListElem.appendChild(li);
+    inputField.value = "";
 
-    // Настраиваем меню для нового таска
     setupMenu(li);
 
-    // Кнопка "Выполнено"
-    li.querySelector(".completeTask").addEventListener("click", function () {
-      let task = this.closest(".task");
-      task.classList.toggle("completed");
+    // "Выполнено"
+    li.querySelector(".completeTask").addEventListener("click", () => {
+      li.classList.toggle("completed");
     });
 
-    // Удаление таска
-    li.querySelector(".deleteTask").addEventListener("click", function (e) {
+    // "Удалить"
+    li.querySelector(".deleteTask").addEventListener("click", (e) => {
       e.stopPropagation();
       li.classList.add("removing");
       setTimeout(() => li.remove(), 500);
     });
 
-    // Редактирование таска
-    li.querySelector(".editTask").addEventListener("click", function (e) {
+    // "Редактировать"
+    li.querySelector(".editTask").addEventListener("click", (e) => {
       e.stopPropagation();
       editTask(li);
     });
   }
 
-  button.addEventListener("click", addTask);
+  addButton.addEventListener("click", addTask);
 
-  input.addEventListener("keydown", (event) => {
+  inputField.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       addTask();
     }
     if (event.key === "Tab" && event.shiftKey) {
       event.preventDefault();
-      const start = input.selectionStart;
-      input.value =
-        input.value.substring(0, start) + "\n" + input.value.substring(start);
-      input.selectionStart = input.selectionEnd = start + 1;
+      const start = inputField.selectionStart;
+      inputField.value =
+        inputField.value.substring(0, start) +
+        "\n" +
+        inputField.value.substring(start);
+      inputField.selectionStart = inputField.selectionEnd = start + 1;
     }
   });
 
   function editTask(li) {
     const taskSpan = li.querySelector(".taskText");
     const oldText = taskSpan.innerHTML.replace(/<br>/g, "\n");
+    const textArea = document.createElement("textarea");
+    textArea.classList.add("editInput");
+    textArea.value = oldText;
 
-    const input = document.createElement("textarea");
-    input.value = oldText;
-    input.classList.add("editInput");
+    taskSpan.replaceWith(textArea);
+    textArea.focus();
 
-    taskSpan.replaceWith(input);
-    input.focus();
+    function saveEdit() {
+      const newText = textArea.value.trim() || oldText;
+      const newSpan = document.createElement("span");
+      newSpan.classList.add("taskText");
+      newSpan.innerHTML = newText.replace(/\n/g, "<br>");
+      textArea.replaceWith(newSpan);
+    }
 
-    input.addEventListener("blur", saveEdit);
-    input.addEventListener("keydown", (event) => {
+    textArea.addEventListener("blur", saveEdit);
+    textArea.addEventListener("keydown", (event) => {
       if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
         saveEdit();
       }
     });
-
-    function saveEdit() {
-      const newText = input.value.trim();
-      if (newText === "") {
-        input.value = oldText;
-      }
-      const newSpan = document.createElement("span");
-      newSpan.classList.add("taskText");
-      newSpan.innerHTML = input.value.replace(/\n/g, "<br>");
-      input.replaceWith(newSpan);
-    }
   }
 
   function setupMenu(taskElement) {
     const button = taskElement.querySelector(".menuButton");
     const menu = taskElement.querySelector(".taskMenu");
 
-    button.addEventListener("click", (event) => {
-      event.stopPropagation();
-
-      // Закрываем все другие открытые меню
+    button.addEventListener("click", (e) => {
+      e.stopPropagation();
       document.querySelectorAll(".taskMenu.visible").forEach((openMenu) => {
         if (openMenu !== menu) {
           openMenu.classList.remove("visible");
         }
       });
-
-      // Переключаем текущее меню
       menu.classList.toggle("visible");
+    });
+
+    // Ховер (показ меню)
+    button.addEventListener("mouseenter", () => menu.classList.add("visible"));
+    button.addEventListener("mouseleave", () => {
+      setTimeout(() => {
+        if (!menu.matches(":hover") && !button.matches(":hover")) {
+          menu.classList.remove("visible");
+        }
+      }, 200);
+    });
+    menu.addEventListener("mouseenter", () => menu.classList.add("visible"));
+    menu.addEventListener("mouseleave", () => {
+      setTimeout(() => {
+        if (!menu.matches(":hover") && !button.matches(":hover")) {
+          menu.classList.remove("visible");
+        }
+      }, 200);
     });
   }
 
   // Закрываем меню при клике вне него
-  document.addEventListener("click", (event) => {
+  document.addEventListener("click", (e) => {
     document.querySelectorAll(".taskMenu.visible").forEach((menu) => {
-      if (!menu.contains(event.target)) {
+      if (!menu.contains(e.target)) {
         menu.classList.remove("visible");
       }
     });
   });
-  document.addEventListener("DOMContentLoaded", () => {
-    function setupMenu(taskElement) {
-      const button = taskElement.querySelector(".menuButton");
-      const menu = taskElement.querySelector(".taskMenu");
 
-      function showMenu() {
-        // Закрываем все другие открытые меню
-        document.querySelectorAll(".taskMenu.visible").forEach((openMenu) => {
-          if (openMenu !== menu) {
-            openMenu.classList.remove("visible");
-          }
-        });
+  // ===================
+  // 2. Корзина (Trash)
+  // ===================
+  const trashToggle = document.getElementById("trashToggle");
+  const trashContainer = document.getElementById("trashContainer");
+  const trashTasksContainer = document.getElementById("trashTasksContainer");
+  const emptyMsg = document.getElementById("emptyTrashMessage");
+  const trashButtonsContainer = document.getElementById(
+    "trashButtonsContainer"
+  );
+  const restoreAllBtn = document.getElementById("restoreAllBtn");
+  const clearTrashBtn = document.getElementById("clearTrashBtn");
 
-        // Показываем текущее меню
-        menu.classList.add("visible");
-      }
-
-      function hideMenu() {
-        setTimeout(() => {
-          if (!menu.matches(":hover") && !button.matches(":hover")) {
-            menu.classList.remove("visible");
-          }
-        }, 200); // Задержка для плавности
-      }
-
-      button.addEventListener("mouseenter", showMenu);
-      button.addEventListener("mouseleave", hideMenu);
-      menu.addEventListener("mouseenter", showMenu);
-      menu.addEventListener("mouseleave", hideMenu);
-    }
-
-    // Применяем настройку меню ко всем уже существующим задачам
-    document.querySelectorAll(".task").forEach(setupMenu);
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const taskList = document.getElementById("taskList");
-
-  // Создаем кнопку-тоггл корзины в виде иконки
-  const trashToggle = document.createElement("button");
-  trashToggle.id = "trashToggle";
-  trashToggle.innerHTML = '<i class="fas fa-trash"></i>';
-  document.body.appendChild(trashToggle);
-
-  // Создаем контейнер для корзины
-  const trashContainer = document.createElement("div");
-  trashContainer.id = "trashContainer";
-  trashContainer.style.display = "none";
-  document.body.appendChild(trashContainer);
-
-  // В контейнере корзины создаем блок для тасков
-  const trashTasksContainer = document.createElement("div");
-  trashTasksContainer.id = "trashTasksContainer";
-  trashContainer.appendChild(trashTasksContainer);
-
-  // Сообщение "Корзина пуста"
-  const emptyMsg = document.createElement("p");
-  emptyMsg.id = "emptyTrashMessage";
-  emptyMsg.textContent = "Recycle Bin is empty";
-  trashTasksContainer.appendChild(emptyMsg);
-
-  // Контейнер для кнопок внизу корзины
-  const trashButtonsContainer = document.createElement("div");
-  trashButtonsContainer.id = "trashButtonsContainer";
-  trashContainer.appendChild(trashButtonsContainer);
-
-  // Кнопка "Восстановить всё"
-  const restoreAllBtn = document.createElement("button");
-  restoreAllBtn.id = "restoreAllBtn";
-  restoreAllBtn.textContent = "Restore all";
-  trashButtonsContainer.appendChild(restoreAllBtn);
-
-  // Кнопка "Очистить корзину"
-  const clearTrashBtn = document.createElement("button");
-  clearTrashBtn.id = "clearTrashBtn";
-  clearTrashBtn.textContent = "Clear all";
-  trashButtonsContainer.appendChild(clearTrashBtn);
-
-  // Тоггл корзины по клику по иконке
   trashToggle.addEventListener("click", (e) => {
     e.stopPropagation();
     trashContainer.style.display =
       trashContainer.style.display === "none" ? "block" : "none";
   });
 
-  // Закрытие корзины при клике вне её
   document.addEventListener("click", (e) => {
     if (
       trashContainer.style.display === "block" &&
@@ -217,13 +385,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Обновление UI корзины: показываем сообщение "Корзина пуста", если нет тасков
   function updateTrashUI() {
     const tasksInTrash = trashTasksContainer.querySelectorAll(".task.inTrash");
     emptyMsg.style.display = tasksInTrash.length === 0 ? "block" : "none";
   }
 
-  // Перемещение таска в корзину
   function moveToTrash(task) {
     task.classList.add("removing");
     setTimeout(() => {
@@ -234,20 +400,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 300);
   }
 
-  // Восстановление таска из корзины
   function restoreTask(task) {
     task.classList.remove("inTrash");
-    taskList.appendChild(task);
+    taskListElem.appendChild(task);
     updateTrashUI();
   }
 
-  // Обеспечиваем наличие кнопки "Восстановить" в таске (если ее нет, добавляем)
   function ensureRestoreButton(task) {
     let restoreBtn = task.querySelector(".restoreTask");
     if (!restoreBtn) {
       restoreBtn = document.createElement("button");
       restoreBtn.classList.add("restoreTask");
-      restoreBtn.textContent = "Restore";
+      restoreBtn.textContent = translations[currentLang].restoreTask;
       task.appendChild(restoreBtn);
       restoreBtn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -256,7 +420,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Заменяем обработчик "Удалить": теперь таск перемещается в корзину
   function replaceDeleteEvent(task) {
     const delBtn = task.querySelector(".deleteTask");
     if (!delBtn) return;
@@ -269,14 +432,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Обрабатываем все существующие таски
+  // Подключаем удаление к существующим задачам
   document.querySelectorAll("#taskList .task").forEach((task) => {
     replaceDeleteEvent(task);
   });
 
-  // Следим за новыми тасками (динамически добавляемыми)
+  // Следим за появлением новых задач
   const observer = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
+    mutations.forEach((mutation) => {
       if (mutation.type === "childList") {
         mutation.addedNodes.forEach((node) => {
           if (
@@ -287,11 +450,10 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
       }
-    }
+    });
   });
   observer.observe(taskList, { childList: true });
 
-  // "Восстановить всё" — возвращает все таски из корзины в список
   restoreAllBtn.addEventListener("click", () => {
     const tasksInTrash = trashTasksContainer.querySelectorAll(".task.inTrash");
     tasksInTrash.forEach((task) => {
@@ -299,7 +461,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // "Очистить корзину" — удаляет все таски из DOM
   clearTrashBtn.addEventListener("click", () => {
     const tasksInTrash = trashTasksContainer.querySelectorAll(".task.inTrash");
     tasksInTrash.forEach((task) => {
@@ -309,134 +470,44 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   updateTrashUI();
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Создаем кнопку меню (гамбургер)
+  // ===================
+  // 3. Шторка настроек (переключение языка)
+  // ===================
+  const settingsButton = document.getElementById("settingsMenuButton");
+  const settingsDrawer = document.getElementById("settingsDrawer");
 
-  // Создаем выдвижную шторку настроек
-
-  document.body.appendChild(settingsDrawer);
-
-  // Клик по кнопке — открыть/закрыть шторку
-  menuButton.addEventListener("click", (e) => {
+  settingsButton.addEventListener("click", (e) => {
     e.stopPropagation();
     settingsDrawer.classList.toggle("open");
-    menuButton.classList.toggle("moved");
+    settingsButton.classList.toggle("moved");
   });
 
-  // Закрываем шторку, если кликнули вне неё
-  document.addEventListener("click", (e) => {
-    // если шторка открыта и клик не по ней и не по кнопке
-    if (
-      settingsDrawer.classList.contains("open") &&
-      !settingsDrawer.contains(e.target) &&
-      e.target !== menuButton
-    ) {
-      settingsDrawer.classList.remove("open");
-      menuButton.classList.remove("moved");
-    }
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  // --- Твой уже существующий код для кнопки и шторки настроек ---
-  const menuButton = document.createElement("button");
-  menuButton.id = "settingsMenuButton";
-  menuButton.innerHTML = "&#9776;";
-  document.body.appendChild(menuButton);
-
-  const settingsDrawer = document.createElement("div");
-  settingsDrawer.id = "settingsDrawer";
-  // Вставляем в шторку наши настройки, включая пункт "Сменить язык"
-  settingsDrawer.innerHTML = `
-    <div class="settingsContent">
-      <h2>Настройки</h2>
-
-      <!-- Пункт меню: Сменить язык -->
-      <div class="settingsItem" id="languageToggle">
-        <span>Сменить язык</span>
-        <span class="arrowIcon">▼</span>
-      </div>
-
-      <!-- Подменю языков с флагами (скрыто, пока не кликнем на "Сменить язык") -->
-      <div class="languageSubmenu" id="languageSubmenu">
-        <div class="languageOption" data-lang="de">
-          <img src="https://flagcdn.com/h40/de.png" alt="German Flag" class="flagIcon">
-          Немецкий
-        </div>
-        <div class="languageOption" data-lang="en">
-          <img src="https://flagcdn.com/h40/gb.png" alt="English Flag" class="flagIcon">
-          Английский
-        </div>
-        <div class="languageOption" data-lang="ru">
-          <img src="https://flagcdn.com/h40/ru.png" alt="Russian Flag" class="flagIcon">
-          Русский
-        </div>
-        <div class="languageOption" data-lang="cn">
-          <img src="https://flagcdn.com/h40/cn.png" alt="Chinese Flag" class="flagIcon">
-          Китайский
-        </div>
-        <div class="languageOption" data-lang="jp">
-          <img src="https://flagcdn.com/h40/jp.png" alt="Japanese Flag" class="flagIcon">
-          Японский
-        </div>
-        <div class="languageOption" data-lang="fr">
-          <img src="https://flagcdn.com/h40/fr.png" alt="French Flag" class="flagIcon">
-          Французский
-        </div>
-        <div class="languageOption" data-lang="es">
-          <img src="https://flagcdn.com/h40/es.png" alt="Spanish Flag" class="flagIcon">
-          Испанский
-        </div>
-      </div>
-      <!-- Здесь могут быть другие пункты настроек, которые ты добавишь позже -->
-    </div>
-  `;
-  document.body.appendChild(settingsDrawer);
-
-  // Твоё существующее переключение шторки
-  menuButton.addEventListener("click", (e) => {
-    e.stopPropagation();
-    settingsDrawer.classList.toggle("open");
-    menuButton.classList.toggle("moved");
-  });
-
-  // Закрыть шторку, если клик вне её
   document.addEventListener("click", (e) => {
     if (
       settingsDrawer.classList.contains("open") &&
       !settingsDrawer.contains(e.target) &&
-      e.target !== menuButton
+      e.target !== settingsButton
     ) {
       settingsDrawer.classList.remove("open");
-      menuButton.classList.remove("moved");
+      settingsButton.classList.remove("moved");
     }
   });
 
-  // --- Новая часть: логика для раскрытия/скрытия списка языков ---
-  const languageToggle = settingsDrawer.querySelector("#languageToggle");
-  const languageSubmenu = settingsDrawer.querySelector("#languageSubmenu");
+  const languageToggleElem = document.getElementById("languageToggle");
+  const languageSubmenuElem = document.getElementById("languageSubmenu");
 
-  // При клике на "Сменить язык" показываем/скрываем подменю
-  languageToggle.addEventListener("click", (e) => {
+  languageToggleElem.addEventListener("click", (e) => {
     e.stopPropagation();
-    languageSubmenu.classList.toggle("open");
+    languageSubmenuElem.classList.toggle("open");
   });
 
-  // --- Новая часть: обрабатываем клик по каждому флагу ---
-  const languageOptions = settingsDrawer.querySelectorAll(".languageOption");
-  languageOptions.forEach((option) => {
+  document.querySelectorAll(".languageOption").forEach((option) => {
     option.addEventListener("click", () => {
       const selectedLang = option.getAttribute("data-lang");
-      // Тут можно вызвать твою функцию смены языка
-      alert("Вы выбрали язык: " + selectedLang);
-
-      // Допустим, ты захочешь в будущем менять текст на сайте:
-      // changeLanguage(selectedLang);
-
-      // После выбора можно скрыть подменю, если захочешь:
-      // languageSubmenu.classList.remove("open");
+      applyTranslations(selectedLang);
+      localStorage.setItem("selectedLanguage", selectedLang);
+      languageSubmenuElem.classList.remove("open");
     });
   });
 });

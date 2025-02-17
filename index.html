@@ -1,33 +1,113 @@
 <!DOCTYPE html>
 <html lang="ru">
   <head>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo List</title>
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+    <!-- Подключаем Font Awesome для иконок -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
     />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>"Todo" List</title>
+
+    <!-- Подключаем стили -->
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
-    <h1>"ToDo" Liste</h1>
+    <h1>ToDo List</h1>
 
+    <!-- Контейнер задач -->
     <div class="task-container">
-      <input type="text" id="taskInput" placeholder="write your task here..." />
-      <button id="addTask">Add Task</button>
+      <input type="text" id="taskInput" placeholder="Напиши задачу здесь..." />
+      <button id="addTask">Добавить задачу</button>
+    </div>
+    <ul id="taskList"></ul>
+
+    <!-- Корзина -->
+    <button id="trashToggle">
+      <i class="fas fa-trash"></i>
+    </button>
+    <div id="trashContainer" style="display: none">
+      <div id="trashTasksContainer">
+        <p id="emptyTrashMessage">Корзина пуста</p>
+      </div>
+      <div id="trashButtonsContainer">
+        <button id="restoreAllBtn">Восстановить всё</button>
+        <button id="clearTrashBtn">Очистить корзину</button>
+      </div>
     </div>
 
-    <ul id="taskList"></ul>
+    <!-- Настройки (Кнопка и шторка) -->
+    <button id="settingsMenuButton">⚙️</button>
+    <div id="settingsDrawer">
+      <div class="settingsContent">
+        <h2>Настройки</h2>
+        <div class="settingsItem" id="languageToggle">
+          <span>Сменить язык</span>
+          <span class="arrowIcon">▼</span>
+        </div>
+        <div class="languageSubmenu" id="languageSubmenu">
+          <div class="languageOption" data-lang="ru">
+            <img
+              src="https://flagcdn.com/h40/ru.png"
+              alt="Russian Flag"
+              class="flagIcon"
+            />
+            <span>Русский</span>
+          </div>
+          <div class="languageOption" data-lang="en">
+            <img
+              src="https://flagcdn.com/h40/gb.png"
+              alt="English Flag"
+              class="flagIcon"
+            />
+            <span>English</span>
+          </div>
+          <div class="languageOption" data-lang="de">
+            <img
+              src="https://flagcdn.com/h40/de.png"
+              alt="German Flag"
+              class="flagIcon"
+            />
+            <span>Deutsch</span>
+          </div>
+          <div class="languageOption" data-lang="cn">
+            <img
+              src="https://flagcdn.com/h40/cn.png"
+              alt="Chinese Flag"
+              class="flagIcon"
+            />
+            <span>中文</span>
+          </div>
+          <div class="languageOption" data-lang="jp">
+            <img
+              src="https://flagcdn.com/h40/jp.png"
+              alt="Japanese Flag"
+              class="flagIcon"
+            />
+            <span>日本語</span>
+          </div>
+          <div class="languageOption" data-lang="fr">
+            <img
+              src="https://flagcdn.com/h40/fr.png"
+              alt="French Flag"
+              class="flagIcon"
+            />
+            <span>Français</span>
+          </div>
+          <div class="languageOption" data-lang="es">
+            <img
+              src="https://flagcdn.com/h40/es.png"
+              alt="Spanish Flag"
+              class="flagIcon"
+            />
+            <span>Español</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Подключаем JS -->
     <script src="script.js"></script>
   </body>
 </html>
