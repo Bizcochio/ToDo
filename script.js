@@ -15,8 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
       <span class="taskText">${taskText.replace(/\n/g, "<br>")}</span>
       <button class="menuButton"><i class="fas fa-ellipsis-h"></i></button>
       <div class="taskMenu">
-          <button class="editTask">✏️ Редактировать</button>
-          <button class="deleteTask">🗑️ Удалить</button>
+          <button class="editTask">✏️ Edit</button>
+          <button class="deleteTask">🗑️ Delete</button>
       </div>
     `;
 
@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Сообщение "Корзина пуста"
   const emptyMsg = document.createElement("p");
   emptyMsg.id = "emptyTrashMessage";
-  emptyMsg.textContent = "Корзина пуста";
+  emptyMsg.textContent = "Recycle Bin is empty";
   trashTasksContainer.appendChild(emptyMsg);
 
   // Контейнер для кнопок внизу корзины
@@ -190,13 +190,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Кнопка "Восстановить всё"
   const restoreAllBtn = document.createElement("button");
   restoreAllBtn.id = "restoreAllBtn";
-  restoreAllBtn.textContent = "Восстановить всё";
+  restoreAllBtn.textContent = "Restore all";
   trashButtonsContainer.appendChild(restoreAllBtn);
 
   // Кнопка "Очистить корзину"
   const clearTrashBtn = document.createElement("button");
   clearTrashBtn.id = "clearTrashBtn";
-  clearTrashBtn.textContent = "Очистить корзину";
+  clearTrashBtn.textContent = "Clear all";
   trashButtonsContainer.appendChild(clearTrashBtn);
 
   // Тоггл корзины по клику по иконке
@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!restoreBtn) {
       restoreBtn = document.createElement("button");
       restoreBtn.classList.add("restoreTask");
-      restoreBtn.textContent = "Восстановить";
+      restoreBtn.textContent = "Restore";
       task.appendChild(restoreBtn);
       restoreBtn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -309,4 +309,134 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   updateTrashUI();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Создаем кнопку меню (гамбургер)
+
+  // Создаем выдвижную шторку настроек
+
+  document.body.appendChild(settingsDrawer);
+
+  // Клик по кнопке — открыть/закрыть шторку
+  menuButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    settingsDrawer.classList.toggle("open");
+    menuButton.classList.toggle("moved");
+  });
+
+  // Закрываем шторку, если кликнули вне неё
+  document.addEventListener("click", (e) => {
+    // если шторка открыта и клик не по ней и не по кнопке
+    if (
+      settingsDrawer.classList.contains("open") &&
+      !settingsDrawer.contains(e.target) &&
+      e.target !== menuButton
+    ) {
+      settingsDrawer.classList.remove("open");
+      menuButton.classList.remove("moved");
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // --- Твой уже существующий код для кнопки и шторки настроек ---
+  const menuButton = document.createElement("button");
+  menuButton.id = "settingsMenuButton";
+  menuButton.innerHTML = "&#9776;";
+  document.body.appendChild(menuButton);
+
+  const settingsDrawer = document.createElement("div");
+  settingsDrawer.id = "settingsDrawer";
+  // Вставляем в шторку наши настройки, включая пункт "Сменить язык"
+  settingsDrawer.innerHTML = `
+    <div class="settingsContent">
+      <h2>Настройки</h2>
+
+      <!-- Пункт меню: Сменить язык -->
+      <div class="settingsItem" id="languageToggle">
+        <span>Сменить язык</span>
+        <span class="arrowIcon">▼</span>
+      </div>
+
+      <!-- Подменю языков с флагами (скрыто, пока не кликнем на "Сменить язык") -->
+      <div class="languageSubmenu" id="languageSubmenu">
+        <div class="languageOption" data-lang="de">
+          <img src="https://flagcdn.com/h40/de.png" alt="German Flag" class="flagIcon">
+          Немецкий
+        </div>
+        <div class="languageOption" data-lang="en">
+          <img src="https://flagcdn.com/h40/gb.png" alt="English Flag" class="flagIcon">
+          Английский
+        </div>
+        <div class="languageOption" data-lang="ru">
+          <img src="https://flagcdn.com/h40/ru.png" alt="Russian Flag" class="flagIcon">
+          Русский
+        </div>
+        <div class="languageOption" data-lang="cn">
+          <img src="https://flagcdn.com/h40/cn.png" alt="Chinese Flag" class="flagIcon">
+          Китайский
+        </div>
+        <div class="languageOption" data-lang="jp">
+          <img src="https://flagcdn.com/h40/jp.png" alt="Japanese Flag" class="flagIcon">
+          Японский
+        </div>
+        <div class="languageOption" data-lang="fr">
+          <img src="https://flagcdn.com/h40/fr.png" alt="French Flag" class="flagIcon">
+          Французский
+        </div>
+        <div class="languageOption" data-lang="es">
+          <img src="https://flagcdn.com/h40/es.png" alt="Spanish Flag" class="flagIcon">
+          Испанский
+        </div>
+      </div>
+      <!-- Здесь могут быть другие пункты настроек, которые ты добавишь позже -->
+    </div>
+  `;
+  document.body.appendChild(settingsDrawer);
+
+  // Твоё существующее переключение шторки
+  menuButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    settingsDrawer.classList.toggle("open");
+    menuButton.classList.toggle("moved");
+  });
+
+  // Закрыть шторку, если клик вне её
+  document.addEventListener("click", (e) => {
+    if (
+      settingsDrawer.classList.contains("open") &&
+      !settingsDrawer.contains(e.target) &&
+      e.target !== menuButton
+    ) {
+      settingsDrawer.classList.remove("open");
+      menuButton.classList.remove("moved");
+    }
+  });
+
+  // --- Новая часть: логика для раскрытия/скрытия списка языков ---
+  const languageToggle = settingsDrawer.querySelector("#languageToggle");
+  const languageSubmenu = settingsDrawer.querySelector("#languageSubmenu");
+
+  // При клике на "Сменить язык" показываем/скрываем подменю
+  languageToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    languageSubmenu.classList.toggle("open");
+  });
+
+  // --- Новая часть: обрабатываем клик по каждому флагу ---
+  const languageOptions = settingsDrawer.querySelectorAll(".languageOption");
+  languageOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+      const selectedLang = option.getAttribute("data-lang");
+      // Тут можно вызвать твою функцию смены языка
+      alert("Вы выбрали язык: " + selectedLang);
+
+      // Допустим, ты захочешь в будущем менять текст на сайте:
+      // changeLanguage(selectedLang);
+
+      // После выбора можно скрыть подменю, если захочешь:
+      // languageSubmenu.classList.remove("open");
+    });
+  });
 });

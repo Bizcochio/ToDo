@@ -447,3 +447,106 @@ h1 {
 .task.removing {
   animation: glitchFade 0.3s steps(4) forwards;
 }
+
+/* Кнопка меню (гамбургер) */
+#settingsMenuButton {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  z-index: 10000;
+  transition: left 0.3s ease;
+}
+
+/* Когда шторка открыта — сдвигаем кнопку вправо */
+#settingsMenuButton.moved {
+  left: 345px; /* подстраиваем под ширину шторки */
+}
+
+/* Шторка настроек */
+#settingsDrawer {
+  position: fixed;
+  top: 0;
+  left: -345px; /* «- (250px ширина + 20px padding + 5px на тень)», чтобы скрыть всё */
+  width: 320px;
+  height: 100%;
+  box-sizing: border-box; /* чтобы padding не увеличивал итоговую ширину */
+  background: rgba(15, 15, 15, 0.95);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  transition: left 0.3s ease;
+  z-index: 9999;
+  padding: 20px;
+}
+
+/* Когда шторка открыта */
+#settingsDrawer.open {
+  left: 0;
+}
+
+/* Содержимое шторки (пример) */
+#settingsDrawer .settingsContent h2 {
+  font-family: "Press Start 2P", cursive;
+  color: #0099ff;
+  margin-bottom: 20px;
+}
+
+/* Пункт меню (настройки) */
+.settingsItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+.settingsItem:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Стрелочка-указатель (▼) */
+.arrowIcon {
+  margin-left: 10px;
+}
+
+/* Подменю с флагами (изначально скрыто) */
+.languageSubmenu {
+  display: none;
+  margin-bottom: 15px;
+}
+
+/* Когда открываем подменю */
+.languageSubmenu.open {
+  display: block;
+}
+
+/* Каждая строка (флаг + название языка) */
+.languageOption {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+/* Ховер по языку */
+.languageOption:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Сами флаги */
+.flagIcon {
+  width: 30px;
+  height: 20px;
+  border-radius: 3px; /* скруглённые края */
+  margin-right: 10px;
+}
