@@ -229,8 +229,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   applyTranslations(currentLang);
 
-  /***** ЛОГИКА ToDo List *****/
-
+  // ===================
+  // 1. ToDo List
+  // ===================
   const inputField = document.getElementById("taskInput");
   const addButton = document.getElementById("addTask");
   const taskListElem = document.getElementById("taskList");
@@ -254,20 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-    li.style.opacity = "0";
-    li.style.transform = "translateY(-10px)";
-
-    // Добавляем таск в начало списка
-    taskListElem.prepend(li);
-
-    // Даем браузеру немного времени обработать добавление, а потом включаем анимацию
-    setTimeout(() => {
-      li.style.opacity = "1";
-      li.style.transform = "translateY(0)";
-      li.style.transition =
-        "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
-    }, 100);
-
+    taskListElem.appendChild(li);
     inputField.value = "";
 
     setupMenu(li);
@@ -480,16 +468,14 @@ document.addEventListener("DOMContentLoaded", () => {
     updateTrashUI();
   }
 
+  // Если у задачи нет кнопки "Восстановить", создаём её
   function ensureRestoreButton(task) {
     let restoreBtn = task.querySelector(".restoreTask");
     if (!restoreBtn) {
       restoreBtn = document.createElement("button");
       restoreBtn.classList.add("restoreTask");
-
-      // Теперь использует перевод в зависимости от выбранного языка
-      restoreBtn.textContent =
-        translations[currentLang]?.restoreTask || "Restore";
-
+      restoreBtn.textContent = translations[currentLang].restoreTask;
+      task.appendChild(restoreBtn);
       restoreBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         restoreTask(task);
@@ -595,17 +581,4 @@ document.addEventListener("DOMContentLoaded", () => {
       languageSubmenuElem.classList.remove("open");
     });
   });
-});
-
-/* Генерация пикселей через JS */
-document.addEventListener("DOMContentLoaded", function () {
-  for (let i = 0; i < 60; i++) {
-    let star = document.createElement("div");
-    star.className = "star";
-    star.style.left = Math.random() * 100 + "vw";
-    star.style.top = Math.random() * 100 + "vh";
-    star.style.animationDuration = Math.random() * 4 + 2 + "s";
-    star.style.animationDelay = Math.random() * 2 + "s";
-    document.body.appendChild(star);
-  }
 });
