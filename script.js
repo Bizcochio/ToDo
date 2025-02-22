@@ -1,14 +1,13 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // ===================
-  // 0. Глобальные переменные и переводы
-  // ===================
-  let currentLang = localStorage.getItem("selectedLanguage") || "ru";
+console.log("Script loaded!");
 
+document.addEventListener("DOMContentLoaded", () => {
+  /***** Глобальные переменные и переводы *****/
+  let currentLang = localStorage.getItem("selectedLanguage") || "ru";
   const translations = {
     en: {
       settingsTitle: "Settings",
       changeLanguage: "Change Language",
-      addTask: "Add Task",
+      addTask: "Add",
       deleteTask: "Delete",
       editTask: "Edit",
       restoreTask: "Restore",
@@ -29,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ru: {
       settingsTitle: "Настройки",
       changeLanguage: "Сменить язык",
-      addTask: "Добавить задачу",
+      addTask: "Добавить",
       deleteTask: "Удалить",
       editTask: "Редактировать",
       restoreTask: "Восстановить",
@@ -50,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     de: {
       settingsTitle: "Einstellungen",
       changeLanguage: "Sprache ändern",
-      addTask: "Aufgabe hinzufügen",
+      addTask: "Hinzufügen",
       deleteTask: "Löschen",
       editTask: "Bearbeiten",
       restoreTask: "Wiederherstellen",
@@ -92,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     jp: {
       settingsTitle: "設定",
       changeLanguage: "言語を変更",
-      addTask: "タスクを追加",
+      addTask: "追加",
       deleteTask: "削除",
       editTask: "編集",
       restoreTask: "復元",
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fr: {
       settingsTitle: "Paramètres",
       changeLanguage: "Changer de langue",
-      addTask: "Ajouter une tâche",
+      addTask: "Ajouter",
       deleteTask: "Supprimer",
       editTask: "Modifier",
       restoreTask: "Restaurer",
@@ -134,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     es: {
       settingsTitle: "Configuración",
       changeLanguage: "Cambiar idioma",
-      addTask: "Agregar tarea",
+      addTask: "Agregar",
       deleteTask: "Eliminar",
       editTask: "Editar",
       restoreTask: "Restaurar",
@@ -153,74 +152,85 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     },
   };
+  document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+      const themeToggle = document.getElementById("themeToggle");
+      const themeIcon = document.getElementById("themeIcon");
+
+      // Создаем оверлей для анимации
+      const overlay = document.createElement("div");
+      overlay.classList.add("theme-transition-overlay");
+      document.body.appendChild(overlay);
+
+      // Загружаем сохраненную тему или по умолчанию ставим "dark"
+      let savedTheme = localStorage.getItem("theme") || "dark";
+      applyTheme(savedTheme, false);
+
+      themeToggle.addEventListener("click", () => {
+        themeIcon.classList.add("rotating");
+        setTimeout(() => themeIcon.classList.remove("rotating"), 500);
+
+        let newTheme = document.body.classList.contains("light-theme")
+          ? "dark"
+          : "light";
+        console.log("Новая тема:", newTheme);
+        applyTheme(newTheme, true);
+      });
+
+      function applyTheme(theme, animate) {
+        if (theme === "light") {
+          document.body.classList.add("light-theme");
+          themeIcon.src = "images/002-sun.png";
+        } else {
+          document.body.classList.remove("light-theme");
+          themeIcon.src = "images/001-full-moon.png";
+        }
+        if (animate) {
+          overlay.classList.add("theme-transition");
+          setTimeout(() => overlay.classList.remove("theme-transition"), 500);
+        }
+        localStorage.setItem("theme", theme);
+      }
+    }, 1000); // задержка 1000 мс (1 секунда)
+  });
 
   function applyTranslations(lang) {
     const t = translations[lang];
     if (!t) return;
     currentLang = lang;
-
-    // Обновляем заголовок настроек
     const settingsHeader = document.querySelector(
       "#settingsDrawer .settingsContent h2"
     );
-    if (settingsHeader) {
-      settingsHeader.textContent = t.settingsTitle;
-    }
-
-    // Пункт "Сменить язык"
+    if (settingsHeader) settingsHeader.textContent = t.settingsTitle;
     const languageToggleText = document.querySelector(
       "#languageToggle span:first-child"
     );
-    if (languageToggleText) {
-      languageToggleText.textContent = t.changeLanguage;
-    }
-
-    // Кнопка "Добавить задачу"
+    if (languageToggleText) languageToggleText.textContent = t.changeLanguage;
     const addTaskBtn = document.getElementById("addTask");
-    if (addTaskBtn) {
-      addTaskBtn.textContent = t.addTask;
-    }
-
-    // Placeholder поля ввода
+    if (addTaskBtn) addTaskBtn.textContent = t.addTask;
     const taskInput = document.getElementById("taskInput");
-    if (taskInput && t.taskPlaceholder) {
+    if (taskInput && t.taskPlaceholder)
       taskInput.placeholder = t.taskPlaceholder;
-    }
-
-    // Сообщение в корзине
     const emptyTrashMsg = document.getElementById("emptyTrashMessage");
-    if (emptyTrashMsg) {
-      emptyTrashMsg.textContent = t.emptyTrash;
-    }
-
-    // Кнопки "Edit", "Delete", "Restore" в существующих задачах
-    document.querySelectorAll(".editTask").forEach((btn) => {
-      btn.textContent = t.editTask;
-    });
-    document.querySelectorAll(".deleteTask").forEach((btn) => {
-      btn.textContent = t.deleteTask;
-    });
-    document.querySelectorAll(".restoreTask").forEach((btn) => {
-      btn.textContent = t.restoreTask;
-    });
-
-    // Кнопки "Restore all" и "Clear all"
+    if (emptyTrashMsg) emptyTrashMsg.textContent = t.emptyTrash;
+    document
+      .querySelectorAll(".editTask")
+      .forEach((btn) => (btn.textContent = t.editTask));
+    document
+      .querySelectorAll(".deleteTask")
+      .forEach((btn) => (btn.textContent = t.deleteTask));
+    document
+      .querySelectorAll(".restoreTask")
+      .forEach((btn) => (btn.textContent = t.restoreTask));
     const restoreAllBtn = document.getElementById("restoreAllBtn");
-    if (restoreAllBtn) {
-      restoreAllBtn.textContent = t.restoreAll;
-    }
+    if (restoreAllBtn) restoreAllBtn.textContent = t.restoreAll;
     const clearTrashBtn = document.getElementById("clearTrashBtn");
-    if (clearTrashBtn) {
-      clearTrashBtn.textContent = t.clearTrash;
-    }
+    if (clearTrashBtn) clearTrashBtn.textContent = t.clearTrash;
   }
-
-  // Применяем язык при загрузке
   applyTranslations(currentLang);
 
-  // ===================
-  // 1. ToDo List
-  // ===================
+  /***** ЛОГИКА ToDo List *****/
+
   const inputField = document.getElementById("taskInput");
   const addButton = document.getElementById("addTask");
   const taskListElem = document.getElementById("taskList");
@@ -229,11 +239,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const taskText = inputField.value.trim();
     if (!taskText) return;
 
-    // Текущие переводы
     const t = translations[currentLang] || translations["ru"];
 
     const li = document.createElement("li");
-    li.classList.add("task", "fadeIn");
+    li.classList.add("task"); // Добавляем без анимации
 
     li.innerHTML = `
       <button class="completeTask">✔</button>
@@ -245,32 +254,39 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-    taskListElem.appendChild(li);
+    li.style.opacity = "0";
+    li.style.transform = "translateY(-10px)";
+
+    // Добавляем таск в начало списка
+    taskListElem.prepend(li);
+
+    // Даем браузеру немного времени обработать добавление, а потом включаем анимацию
+    setTimeout(() => {
+      li.style.opacity = "1";
+      li.style.transform = "translateY(0)";
+      li.style.transition =
+        "opacity 0.3s ease-in-out, transform 0.3s ease-in-out";
+    }, 100);
+
     inputField.value = "";
 
     setupMenu(li);
+    setupDragAndDrop(li);
+    setupCompletion(li);
 
-    // "Выполнено"
-    li.querySelector(".completeTask").addEventListener("click", () => {
-      li.classList.toggle("completed");
-    });
-
-    // "Удалить"
+    // Обработчик удаления через корзину
     li.querySelector(".deleteTask").addEventListener("click", (e) => {
       e.stopPropagation();
       li.classList.add("removing");
       setTimeout(() => li.remove(), 500);
     });
-
-    // "Редактировать"
+    // Обработчик редактирования
     li.querySelector(".editTask").addEventListener("click", (e) => {
       e.stopPropagation();
       editTask(li);
     });
   }
-
   addButton.addEventListener("click", addTask);
-
   inputField.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -293,10 +309,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const textArea = document.createElement("textarea");
     textArea.classList.add("editInput");
     textArea.value = oldText;
-
     taskSpan.replaceWith(textArea);
     textArea.focus();
-
     function saveEdit() {
       const newText = textArea.value.trim() || oldText;
       const newSpan = document.createElement("span");
@@ -304,7 +318,6 @@ document.addEventListener("DOMContentLoaded", () => {
       newSpan.innerHTML = newText.replace(/\n/g, "<br>");
       textArea.replaceWith(newSpan);
     }
-
     textArea.addEventListener("blur", saveEdit);
     textArea.addEventListener("keydown", (event) => {
       if (event.key === "Enter" && !event.shiftKey) {
@@ -317,79 +330,138 @@ document.addEventListener("DOMContentLoaded", () => {
   function setupMenu(taskElement) {
     const button = taskElement.querySelector(".menuButton");
     const menu = taskElement.querySelector(".taskMenu");
-
     button.addEventListener("click", (e) => {
       e.stopPropagation();
       document.querySelectorAll(".taskMenu.visible").forEach((openMenu) => {
-        if (openMenu !== menu) {
-          openMenu.classList.remove("visible");
-        }
+        if (openMenu !== menu) openMenu.classList.remove("visible");
       });
       menu.classList.toggle("visible");
     });
-
-    // Ховер (показ меню)
     button.addEventListener("mouseenter", () => menu.classList.add("visible"));
     button.addEventListener("mouseleave", () => {
       setTimeout(() => {
-        if (!menu.matches(":hover") && !button.matches(":hover")) {
+        if (!menu.matches(":hover") && !button.matches(":hover"))
           menu.classList.remove("visible");
-        }
       }, 200);
     });
     menu.addEventListener("mouseenter", () => menu.classList.add("visible"));
     menu.addEventListener("mouseleave", () => {
       setTimeout(() => {
-        if (!menu.matches(":hover") && !button.matches(":hover")) {
+        if (!menu.matches(":hover") && !button.matches(":hover"))
           menu.classList.remove("visible");
-        }
       }, 200);
     });
   }
-
-  // Закрываем меню при клике вне него
   document.addEventListener("click", (e) => {
     document.querySelectorAll(".taskMenu.visible").forEach((menu) => {
-      if (!menu.contains(e.target)) {
-        menu.classList.remove("visible");
-      }
+      if (!menu.contains(e.target)) menu.classList.remove("visible");
     });
   });
 
-  // ===================
-  // 2. Корзина (Trash)
-  // ===================
+  // Обработка выполнения таска: если не выполнен – запускаем анимацию спуска и перемещаем в конец; если выполнен – возвращаем в начало
+
+  function setupCompletion(taskElement) {
+    const completeButton = taskElement.querySelector(".completeTask");
+    completeButton.addEventListener("click", () => {
+      if (!taskElement.classList.contains("completed")) {
+        // Отмечаем задачу выполненной и запускаем анимацию спуска
+        taskElement.classList.add("completed");
+        taskElement.classList.add("slide-down");
+        setTimeout(() => {
+          taskElement.classList.remove("slide-down");
+
+          // Перебираем все задачи, чтобы найти первую выполненную задачу
+          const tasks = Array.from(taskListElem.children);
+          let inserted = false;
+          for (let i = 0; i < tasks.length; i++) {
+            // Если встречаем задачу, которая уже выполнена и не является текущей
+            if (
+              tasks[i].classList.contains("completed") &&
+              tasks[i] !== taskElement
+            ) {
+              taskListElem.insertBefore(taskElement, tasks[i]);
+              inserted = true;
+              break;
+            }
+          }
+          // Если не найдено ни одной выполненной задачи – добавляем в конец
+          if (!inserted) {
+            taskListElem.appendChild(taskElement);
+          }
+        }, 400);
+      } else {
+        // Если снимаем отметку о выполнении, возвращаем задачу в начало общего списка
+        taskElement.classList.remove("completed");
+        taskListElem.prepend(taskElement);
+      }
+    });
+  }
+
+  /* Drag & Drop для тасков */
+  function setupDragAndDrop(taskElement) {
+    taskElement.addEventListener("dragstart", (e) => {
+      e.dataTransfer.effectAllowed = "move";
+      taskElement.classList.add("dragging");
+    });
+    taskElement.addEventListener("dragend", () => {
+      taskElement.classList.remove("dragging");
+    });
+    taskElement.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      taskElement.classList.add("drag-over");
+    });
+    taskElement.addEventListener("dragleave", () => {
+      taskElement.classList.remove("drag-over");
+    });
+    taskElement.addEventListener("drop", (e) => {
+      e.preventDefault();
+      taskElement.classList.remove("drag-over");
+      const draggingItem = document.querySelector(".dragging");
+      if (draggingItem && draggingItem !== taskElement) {
+        let tasks = Array.from(taskListElem.children);
+        let draggingIndex = tasks.indexOf(draggingItem);
+        let targetIndex = tasks.indexOf(taskElement);
+        if (draggingIndex < targetIndex) {
+          taskListElem.insertBefore(draggingItem, taskElement.nextSibling);
+        } else {
+          taskListElem.insertBefore(draggingItem, taskElement);
+        }
+      }
+    });
+  }
+
+  /***** Функционал корзины (Trash) *****/
+
+  // Элементы корзины
   const trashToggle = document.getElementById("trashToggle");
   const trashContainer = document.getElementById("trashContainer");
   const trashTasksContainer = document.getElementById("trashTasksContainer");
-  const emptyMsg = document.getElementById("emptyTrashMessage");
-  const trashButtonsContainer = document.getElementById(
-    "trashButtonsContainer"
-  );
+  const emptyTrashMessage = document.getElementById("emptyTrashMessage");
   const restoreAllBtn = document.getElementById("restoreAllBtn");
   const clearTrashBtn = document.getElementById("clearTrashBtn");
 
+  // Функция открытия/закрытия корзины
   trashToggle.addEventListener("click", (e) => {
     e.stopPropagation();
-    trashContainer.style.display =
-      trashContainer.style.display === "none" ? "block" : "none";
-  });
-
-  document.addEventListener("click", (e) => {
+    // Если корзина скрыта или не установлено свойство display – показываем, иначе скрываем
     if (
-      trashContainer.style.display === "block" &&
-      !trashContainer.contains(e.target) &&
-      e.target !== trashToggle
+      trashContainer.style.display === "none" ||
+      trashContainer.style.display === ""
     ) {
+      trashContainer.style.display = "block";
+    } else {
       trashContainer.style.display = "none";
     }
   });
 
+  // Функция обновления UI корзины (показывает сообщение, если корзина пуста)
   function updateTrashUI() {
     const tasksInTrash = trashTasksContainer.querySelectorAll(".task.inTrash");
-    emptyMsg.style.display = tasksInTrash.length === 0 ? "block" : "none";
+    emptyTrashMessage.style.display =
+      tasksInTrash.length === 0 ? "block" : "none";
   }
 
+  // Функция перемещения задачи в корзину с анимацией
   function moveToTrash(task) {
     task.classList.add("removing");
     setTimeout(() => {
@@ -400,9 +472,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 300);
   }
 
+  // Функция восстановления задачи из корзины
   function restoreTask(task) {
     task.classList.remove("inTrash");
-    taskListElem.appendChild(task);
+    // Восстанавливаем в конец основного списка (можно изменить на prepend, если нужно)
+    document.getElementById("taskList").appendChild(task);
     updateTrashUI();
   }
 
@@ -411,15 +485,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!restoreBtn) {
       restoreBtn = document.createElement("button");
       restoreBtn.classList.add("restoreTask");
-      restoreBtn.textContent = translations[currentLang].restoreTask;
-      task.appendChild(restoreBtn);
+
+      // Теперь использует перевод в зависимости от выбранного языка
+      restoreBtn.textContent =
+        translations[currentLang]?.restoreTask || "Restore";
+
       restoreBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         restoreTask(task);
       });
+
+      task.appendChild(restoreBtn);
     }
   }
 
+  // Переподключаем обработчик для кнопки "Удалить", чтобы таск уходил в корзину
   function replaceDeleteEvent(task) {
     const delBtn = task.querySelector(".deleteTask");
     if (!delBtn) return;
@@ -432,13 +512,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Подключаем удаление к существующим задачам
+  // Для всех существующих тасков в списке подключаем обработчик удаления
   document.querySelectorAll("#taskList .task").forEach((task) => {
     replaceDeleteEvent(task);
   });
 
-  // Следим за появлением новых задач
-  const observer = new MutationObserver((mutations) => {
+  // Если новые таски добавляются динамически, следим за ними
+  const trashObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       if (mutation.type === "childList") {
         mutation.addedNodes.forEach((node) => {
@@ -452,37 +532,45 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-  observer.observe(taskList, { childList: true });
-
-  restoreAllBtn.addEventListener("click", () => {
-    const tasksInTrash = trashTasksContainer.querySelectorAll(".task.inTrash");
-    tasksInTrash.forEach((task) => {
-      restoreTask(task);
-    });
+  trashObserver.observe(document.getElementById("taskList"), {
+    childList: true,
   });
 
+  // Обработчик кнопки "Восстановить всё"
+  restoreAllBtn.addEventListener("click", () => {
+    const tasksInTrash = trashTasksContainer.querySelectorAll(".task.inTrash");
+    tasksInTrash.forEach((task) => restoreTask(task));
+  });
+
+  // Обработчик кнопки "Очистить корзину"
   clearTrashBtn.addEventListener("click", () => {
     const tasksInTrash = trashTasksContainer.querySelectorAll(".task.inTrash");
-    tasksInTrash.forEach((task) => {
-      task.remove();
-    });
+    tasksInTrash.forEach((task) => task.remove());
     updateTrashUI();
   });
 
+  // Первоначальное обновление UI корзины
   updateTrashUI();
 
-  // ===================
-  // 3. Шторка настроек (переключение языка)
-  // ===================
+  // Дополнительно, если у тебя есть обработчик клика по document, чтобы закрывать корзину при клике вне её:
+  document.addEventListener("click", (e) => {
+    if (
+      trashContainer.style.display === "block" &&
+      !trashContainer.contains(e.target) &&
+      e.target !== trashToggle
+    ) {
+      trashContainer.style.display = "none";
+    }
+  });
+
+  /* Шторка настроек и переключение языка */
   const settingsButton = document.getElementById("settingsMenuButton");
   const settingsDrawer = document.getElementById("settingsDrawer");
-
   settingsButton.addEventListener("click", (e) => {
     e.stopPropagation();
     settingsDrawer.classList.toggle("open");
     settingsButton.classList.toggle("moved");
   });
-
   document.addEventListener("click", (e) => {
     if (
       settingsDrawer.classList.contains("open") &&
@@ -493,15 +581,12 @@ document.addEventListener("DOMContentLoaded", () => {
       settingsButton.classList.remove("moved");
     }
   });
-
   const languageToggleElem = document.getElementById("languageToggle");
   const languageSubmenuElem = document.getElementById("languageSubmenu");
-
   languageToggleElem.addEventListener("click", (e) => {
     e.stopPropagation();
     languageSubmenuElem.classList.toggle("open");
   });
-
   document.querySelectorAll(".languageOption").forEach((option) => {
     option.addEventListener("click", () => {
       const selectedLang = option.getAttribute("data-lang");
@@ -510,4 +595,17 @@ document.addEventListener("DOMContentLoaded", () => {
       languageSubmenuElem.classList.remove("open");
     });
   });
+});
+
+/* Генерация пикселей через JS */
+document.addEventListener("DOMContentLoaded", function () {
+  for (let i = 0; i < 60; i++) {
+    let star = document.createElement("div");
+    star.className = "star";
+    star.style.left = Math.random() * 100 + "vw";
+    star.style.top = Math.random() * 100 + "vh";
+    star.style.animationDuration = Math.random() * 4 + 2 + "s";
+    star.style.animationDelay = Math.random() * 2 + "s";
+    document.body.appendChild(star);
+  }
 });
