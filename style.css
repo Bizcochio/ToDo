@@ -39,6 +39,7 @@ h1 {
 }
 
 /* Лёгкое, почти незаметное мерцание лого*/
+/* Лёгкое, почти незаметное мерцание лого*/
 @keyframes subtleFlicker {
   0% {
     opacity: 1;
@@ -65,6 +66,7 @@ h1 {
   transition: caret-color 0.2s ease-in-out;
 }
 
+
 #taskInput:focus {
   border-color: #0099ff;
   box-shadow: 0 0 10px #0099ff;
@@ -86,13 +88,16 @@ h1 {
   background-color: #0099ff;
   border: none;
   border-radius: 10px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
 #addTask:active {
   transform: scale(0.9);
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.466);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.466);
   background-color: #0b5688;
+  border: 1px solid #95abc5;
   border: 1px solid #95abc5;
 }
 
@@ -103,9 +108,12 @@ h1 {
 /* 🔹 Анимация появления */
 @keyframes fadeInTask {
   0% {
+@keyframes fadeInTask {
+  0% {
     opacity: 0;
     transform: translateY(-10px);
   }
+  100% {
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -142,6 +150,9 @@ h1 {
   box-shadow: 0 0 4px #0099ff;
   animation: fadeInTask 0.3s ease-in-out;
   z-index: 2;
+  box-shadow: 0 0 4px #0099ff;
+  animation: fadeInTask 0.3s ease-in-out;
+  z-index: 2;
 }
 
 /* 🔹 Текст таска */
@@ -159,6 +170,7 @@ h1 {
 .menuButton {
   background: none;
   border: none;
+  color: rgb(255, 255, 255);
   color: rgb(255, 255, 255);
   font-size: 25px;
   cursor: pointer;
@@ -257,6 +269,15 @@ h1 {
   }
 }
 
+@keyframes neonGlow {
+  0% {
+    box-shadow: 0px 0px 8px rgba(92, 92, 92, 0.6);
+  }
+  100% {
+    box-shadow: 0px 0px 15px rgb(78, 78, 78);
+  }
+}
+
 .editInput:focus {
   border-color: #add4ad;
   box-shadow: 0 0 5px #c7c7c7;
@@ -278,17 +299,20 @@ h1 {
   background: none;
   border: none;
   font-size: 30px;
+  font-size: 30px;
   cursor: pointer;
   color: #888;
   margin-right: 15px;
   transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
+
 .task.completed .completeTask {
   color: #4bf329;
   text-shadow: 0 0 5px #4bf329;
 }
 .completeTask:active {
+  transform: scale(2);
   transform: scale(2);
 }
 .task.completed .taskText {
@@ -316,11 +340,17 @@ h1 {
   color: #6e8ea8ee;
   font-size: 50px;
   text-shadow: 0 0 8px #484d7a;
+  color: #6e8ea8ee;
+  font-size: 50px;
+  text-shadow: 0 0 8px #484d7a;
   padding: 0;
   z-index: 9999;
   pointer-events: auto;
 }
 #trashToggle:hover {
+  scale: (1.1);
+  color: #6dc3ebe0;
+  text-shadow: 0 0 11px #6fa4e0;
   scale: (1.1);
   color: #6dc3ebe0;
   text-shadow: 0 0 11px #6fa4e0;
@@ -416,12 +446,14 @@ h1 {
   justify-content: center;
 }
 
+
 .task.inTrash .restoreTask {
   display: flex !important;
 }
 .task.inTrash .restoreTask:hover {
   background-color: #007acc;
 }
+
 
 .task.removing {
   animation: glitchFade 0.2s steps(4) forwards;
@@ -441,7 +473,10 @@ h1 {
   font-family: "Press Start 2P", cursive;
   font-size: 55px;
   color: none;
+  font-size: 55px;
+  color: none;
   cursor: pointer;
+  z-index: 2;
   z-index: 2;
   transition: left 0.3s ease, transform 0.1s ease;
   padding: 5px;
@@ -468,8 +503,10 @@ h1 {
   height: 100%;
   box-sizing: border-box;
   background: rgba(15, 15, 15, 0.849);
+  background: rgba(15, 15, 15, 0.849);
   box-shadow: 2px 0 5px rgba(38, 112, 182, 0.767);
   transition: left 0.3s ease;
+  z-index: 2;
   z-index: 2;
   padding: 20px;
 }
@@ -492,11 +529,16 @@ h1 {
   padding: 8px;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
+  border-radius: 8px;
   transition: background 0.2s;
 }
 .settingsItem:hover {
   background-color: rgba(30, 112, 160, 0.699);
 }
+span img {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
 span img {
   width: 30px;
   height: 30px;

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 test.js
 # Logs
 logs
@@ -135,3 +136,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+=======
+node_modules/
+fonts/
+package-lock.json
+test.js
+>>>>>>> 26d1dc3674cb824f5c19f5502406d717400c5314
