@@ -9,6 +9,11 @@ body {
   color: aliceblue;
   font-family: "Press Start 2P", cursive !important;
   text-align: center;
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+  position: relative;
+  padding: 10px;
+  margin: 0 auto;
+  max-width: 100%;
 }
 
 body.light-theme {
@@ -25,17 +30,15 @@ body.light-theme {
 
 h1 {
   font-size: 50px;
-  font-family: "Press Start 2P", cursive; /* Классический пиксельный шрифт */
   letter-spacing: 2px;
-  text-align: center;
-  display: inline-block;
-  color: #eceaeacb; /* Спокойный серо-белый цвет */
-
-  /* Пиксельная тень, но без лишней кислотности */
+  color: #eceaeacb;
   text-shadow: -2px 0 rgba(100, 200, 200, 0.808), 5px 0 #0099ff;
-
-  /* Эффект мягкого мигания */
   animation: subtleFlicker 1.5s infinite alternate ease-in-out;
+  display: inline-block;
+  max-width: 90%;
+  white-space: pre-wrap; /* Позволяет переносить слова */
+  word-break: break-word;
+  margin-bottom: 20px;
 }
 
 /* Лёгкое, почти незаметное мерцание лого*/
@@ -53,7 +56,26 @@ h1 {
 }
 /* 🔹 Поле ввода */
 #taskInput {
+  width: 350px;
+  padding: 10px;
+  font-size: 10px;
+  color: white;
+  background: rgb(19, 19, 19);
+  border: 3px solid #444;
+  border-radius: 10px;
+  outline: none;
+  caret-color: #0099ff;
+  transition: caret-color 0.2s ease-in-out;
   font-family: "Press Start 2P", cursive;
+}
+
+#taskInput,
+#addTask {
+  display: block;
+  margin: 0 auto 20px auto;
+}
+
+#taskInput {
   width: 350px;
   padding: 10px;
   font-size: 10px;
@@ -70,27 +92,29 @@ h1 {
   border-color: #0099ff;
   box-shadow: 0 0 10px #0099ff;
 }
+
 #taskInput::placeholder {
   opacity: 1;
   transition: opacity 0.3s ease-in-out;
 }
+
 #taskInput:focus::placeholder {
   opacity: 0;
 }
 
 /* 🔹 Кнопка "Добавить" */
 #addTask {
-  font-family: "Press Start 2P", cursive;
   padding: 12px 20px;
   font-size: 10px;
   color: white;
   background-color: #0099ff;
   border: none;
   border-radius: 10px;
-  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  font-family: "Press Start 2P", cursive;
 }
+
 #addTask:active {
   transform: scale(0.9);
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.466);
@@ -164,20 +188,18 @@ h1 {
 .menuButton {
   background: none;
   border: none;
-  color: rgb(255, 255, 255);
-  color: rgb(255, 255, 255);
+  color: white;
   font-size: 25px;
   cursor: pointer;
-  margin-left: auto;
   position: absolute;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
 }
 
-/* 🔹 Мини-меню таска */
+/* ============ Меню задачи ============ */
+/* На широком экране – меню открывается справа */
 .taskMenu {
-  font-family: "Press Start 2P", cursive;
   position: absolute;
   top: 50%;
   left: calc(100% + 5px);
@@ -195,14 +217,14 @@ h1 {
   pointer-events: none;
   transition: transform 0.2s ease-in-out, opacity 0.15s ease-in-out;
 }
+
 .taskMenu.visible {
-  font-family: "Press Start 2P", cursive !important;
   transform: translateY(-50%) scale(1);
   opacity: 1;
   pointer-events: auto;
 }
+
 .taskMenu button {
-  font-family: "Press Start 2P", cursive !important;
   color: white;
   background: rgb(0, 0, 0);
   padding: 12px;
@@ -217,18 +239,22 @@ h1 {
   cursor: pointer;
   transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
 }
+
 .taskMenu button i {
   font-size: 14px;
   transition: transform 0.2s ease-in-out;
 }
+
 .taskMenu button:hover {
   background: rgba(0, 153, 255, 0.3);
 }
+
 .taskMenu button:active {
   transform: scale(0.95);
 }
 .deleteTask {
   color: #ff444483;
+  font-family: "Press Start 2P", cursive;
 }
 .deleteTask:hover {
   background: rgba(255, 68, 68, 0.2);
@@ -236,13 +262,13 @@ h1 {
 }
 .editTask {
   color: #4df523;
+  font-family: "Press Start 2P", cursive;
 }
 .editTask:hover {
   background: rgba(245, 166, 35, 0.2);
   text-shadow: 0 0 5px #f5a623;
 }
 .editInput {
-  font-family: "Press Start 2P", cursive;
   width: 100%;
   font-size: 14px;
   color: rgb(255, 255, 255);
@@ -253,9 +279,9 @@ h1 {
   outline: none;
   resize: none;
   transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  font-family: "Press Start 2P", cursive;
 }
 body.light-theme .editInput {
-  font-family: "Press Start 2P", cursive;
   width: 100%;
   font-size: 14px;
   color: rgb(0, 0, 0);
@@ -382,7 +408,6 @@ body.light-theme .editInput {
 }
 #emptyTrashMessage {
   text-align: center;
-  font-family: "Press Start 2P", cursive;
   font-size: 12px;
   margin: 5px 0;
   color: #999;
@@ -392,21 +417,33 @@ body.light-theme .editInput {
   justify-content: space-between;
   gap: 10px;
 }
-#restoreAllBtn,
+#restoreAllBtn {
+  flex: 1;
+  padding: 5px 0;
+  font-size: 10px;
+  color: white;
+  background-color: #075812;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: "Press Start 2P", cursive;
+}
 #clearTrashBtn {
   flex: 1;
   padding: 5px 0;
-  font-family: "Press Start 2P", cursive;
   font-size: 10px;
   color: white;
-  background-color: #0099ff;
-  border: none;
+  background-color: #5f1a15;
   border-radius: 3px;
   cursor: pointer;
+  font-family: "Press Start 2P", cursive;
 }
 #restoreAllBtn:hover,
 #clearTrashBtn:hover {
-  background-color: #007acc;
+  transform: scale(0.9);
+}
+#restoreAllBtn:active,
+#clearTrashBtn:active {
+  border: 1px solid #ccc;
 }
 .task.inTrash {
   display: grid;
@@ -438,7 +475,6 @@ body.light-theme .editInput {
 }
 .restoreTask {
   display: none !important;
-  font-family: "Press Start 2P", cursive;
   font-size: 10px;
   color: white;
   background-color: #0099ff;
@@ -451,6 +487,7 @@ body.light-theme .editInput {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: "Press Start 2P", cursive;
 }
 
 .task.inTrash .restoreTask {
@@ -475,7 +512,6 @@ body.light-theme .editInput {
   left: 10px;
   background: none;
   border: none;
-  font-family: "Press Start 2P", cursive;
   font-size: 55px;
   color: none;
   font-size: 55px;
@@ -519,7 +555,6 @@ body.light-theme .editInput {
   left: 0;
 }
 #settingsDrawer .settingsContent h2 {
-  font-family: "Press Start 2P", cursive;
   color: #0099ff;
   margin-bottom: 20px;
 }
@@ -580,7 +615,6 @@ span img {
 body {
   transition: background 0.8s ease-in-out, color 0.5s ease-in-out;
   position: relative;
-  overflow: hidden;
 }
 
 /* Кнопка переключения темы */
@@ -673,11 +707,23 @@ body.light-theme #emptyTrashMessage {
 }
 
 /* Кнопки в корзине */
-body.light-theme #restoreAllBtn,
-body.light-theme #clearTrashBtn {
-  background-color: #66ccff;
+body.light-theme #restoreAllBtn {
+  background-color: #6ba183;
   color: #000;
   border: none;
+}
+body.light-theme #clearTrashBtn {
+  background-color: #c08383;
+  color: #000;
+  border: none;
+}
+body.light-theme #restoreAllBtn:hover,
+body.light-theme #clearTrashBtn:hover {
+  transform: scale(0.9);
+}
+body.light-theme #restoreAllBtn:active,
+body.light-theme #clearTrashBtn:active {
+  border: 1px solid #303030;
 }
 
 /* Кнопка корзины в светлой теме, если нужно осветлить */
@@ -840,26 +886,26 @@ body.light-theme .star {
 }
 /* Плавный переход фона и цвета */
 body {
-  transition: background 0.8s ease-in-out, color 0.5s ease-in-out;
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
   position: relative;
-  overflow: hidden;
 }
 
-/* Оверлей для анимации перехода темы */
-.theme-transition-overlay {
+/* Плавный переход при смене темы */
+.theme-transition {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: inherit;
+  z-index: 9999;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.8s ease-in-out;
-  z-index: 999;
-}
-.theme-transition-overlay.theme-transition {
   opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+.theme-transition.hidden {
+  opacity: 0;
 }
 
 /* Стили кнопки переключения темы */
