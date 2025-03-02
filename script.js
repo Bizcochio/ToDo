@@ -568,8 +568,8 @@ document.addEventListener("click", (e) => {
 });
 
 /* Шторка настроек и переключение языка */
-const settingsButton = document.getElementById("settingsMenuButton");
-const settingsDrawer = document.getElementById("settingsDrawer");
+let settingsButton = document.getElementById("settingsMenuButton");
+let settingsDrawer = document.getElementById("settingsDrawer");
 settingsButton.addEventListener("click", (e) => {
   e.stopPropagation();
   settingsDrawer.classList.toggle("open");
@@ -610,5 +610,18 @@ document.addEventListener("DOMContentLoaded", function () {
     star.style.animationDuration = Math.random() * 4 + 2 + "s";
     star.style.animationDelay = Math.random() * 2 + "s";
     document.body.appendChild(star);
+  }
+});
+const settingsMenuButton = document.getElementById("settingsMenuButton");
+settingsDrawer = document.getElementById("settingsDrawer"); // Без `const`
+
+settingsMenuButton.addEventListener("click", () => {
+  settingsDrawer.classList.add("open"); // Открываем меню
+  settingsMenuButton.classList.add("hidden"); // Прячем кнопку
+});
+
+settingsDrawer.addEventListener("transitionend", () => {
+  if (!settingsDrawer.classList.contains("open")) {
+    settingsMenuButton.classList.remove("hidden"); // Возвращаем кнопку
   }
 });

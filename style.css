@@ -1,19 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
+html,
 body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Убираем горизонтальный скролл */
+}
+
+body {
+  min-height: 100vh; /* Теперь фон тянется на весь экран */
   background: radial-gradient(
     circle at center,
     rgb(4, 4, 17) 8%,
     rgba(0, 0, 0, 1) 90%
   );
+  background-size: cover;
+  background-repeat: no-repeat;
   color: aliceblue;
   font-family: "Press Start 2P", cursive !important;
   text-align: center;
   transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
-  position: relative;
-  padding: 10px;
-  margin: 0 auto;
-  max-width: 100%;
+  padding: 10px; /* Оставляем, но он не будет ломать фон */
 }
 
 body.light-theme {
@@ -23,13 +31,12 @@ body.light-theme {
     rgb(162, 187, 201) 90%
   );
   color: aliceblue;
-  font-family: "Press Start 2P", cursive !important;
-  text-align: center;
 }
+
 /* Переключение темы */
 
 h1 {
-  font-size: 50px;
+  font-size: 60px;
   letter-spacing: 2px;
   color: #eceaeacb;
   text-shadow: -2px 0 rgba(100, 200, 200, 0.808), 5px 0 #0099ff;
@@ -56,17 +63,25 @@ h1 {
 }
 /* 🔹 Поле ввода */
 #taskInput {
-  width: 350px;
-  padding: 10px;
-  font-size: 10px;
+  width: 70%; /* Вместо 10%, чтобы не было микроскопическим */
+  max-width: 380px; /* На больших экранах не растягивать слишком сильно */
+  padding: clamp(8px, 2vw, 12px);
+  font-size: clamp(10px, 3vw, 13px); /* Адаптивный текст */
   color: white;
   background: rgb(19, 19, 19);
-  border: 3px solid #444;
+  border: 2px solid #444; /* Чуть тоньше, чтобы выглядело аккуратнее */
   border-radius: 10px;
   outline: none;
   caret-color: #0099ff;
   transition: caret-color 0.2s ease-in-out;
   font-family: "Press Start 2P", cursive;
+}
+
+@media (max-width: 768px) {
+  #taskInput {
+    width: 80%; /* На мобилке чуть шире */
+    border-width: 2px; /* Тоньше граница */
+  }
 }
 
 #taskInput,
@@ -104,8 +119,11 @@ h1 {
 
 /* 🔹 Кнопка "Добавить" */
 #addTask {
-  padding: 12px 20px;
-  font-size: 10px;
+  width: auto;
+  min-width: 100px;
+  max-width: 90%;
+  padding: clamp(8px, 2vw, 12px) clamp(15px, 4vw, 20px);
+  font-size: clamp(10px, 3vw, 13px); /* Теперь текст адаптивный */
   color: white;
   background-color: #0099ff;
   border: none;
@@ -113,6 +131,14 @@ h1 {
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   font-family: "Press Start 2P", cursive;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  #addTask {
+    font-size: 10px; /* Чуть крупнее на мобилке */
+    padding: 10px 18px;
+  }
 }
 
 #addTask:active {
@@ -149,6 +175,8 @@ h1 {
 
 /* 🔹 Таск */
 .task {
+  width: 90%;
+  max-width: 350px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -389,13 +417,13 @@ body.light-theme .editInput {
   text-shadow: 0 0 11px #6fa4e0;
 }
 #trashContainer {
-  margin-right: 20px;
-  margin-bottom: 50px;
   position: fixed;
-  bottom: 60px;
+  bottom: 120px;
   right: 20px;
-  width: 420px;
-  max-height: 50vh;
+  width: 30vw; /* Динамический размер */
+  max-width: 420px; /* Но не больше 420px */
+  min-width: 280px; /* И не меньше 280px */
+  max-height: min(50vh, 400px);
   overflow-y: auto;
   background: rgba(15, 15, 15, 0.95);
   border: 1px solid #0099ff;
@@ -403,6 +431,17 @@ body.light-theme .editInput {
   padding: 10px;
   z-index: 200;
 }
+
+@media (max-width: 768px) {
+  #trashContainer {
+    bottom: 120px;
+    right: 10px;
+    width: 90%; /* На мобилке ширина 90% */
+    max-width: none; /* Убираем ограничение в 420px */
+    min-width: auto;
+  }
+}
+
 #trashTasksContainer {
   margin-bottom: 20px;
 }
@@ -508,19 +547,31 @@ body.light-theme .editInput {
 /* Кнопка настроек */
 #settingsMenuButton {
   position: fixed;
-  top: 10px;
-  left: 10px;
+  top: 1vh; /* Одинаковый отступ сверху */
+  width: 50px; /* Делаем размер одинаковым */
+  left: 2vw; /* Вместо фиксированных пикселей */
   background: none;
   border: none;
-  font-size: 55px;
-  color: none;
-  font-size: 55px;
-  color: none;
+  font-size: clamp(30px, 4vw, 55px); /* Адаптивный размер */
+  color: white; /* Вместо `none`, потому что `none` не работает */
   cursor: pointer;
-  z-index: 2;
-  z-index: 2;
-  transition: left 0.3s ease, transform 0.1s ease;
+  z-index: 10; /* Один раз, без дублирования */
   padding: 5px;
+  transition: left 0.3s ease, transform 0.1s ease, opacity 0.2s ease;
+}
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  #settingsMenuButton {
+    top: 1vh; /* Одинаковый отступ сверху */
+    width: 50px; /* Делаем размер одинаковым */
+    left: 3vw; /* Отодвинуть немного, если слишком прижато */
+    font-size: 40px;
+  }
 }
 
 #settingsMenuButton:hover {
@@ -539,18 +590,23 @@ body.light-theme .editInput {
 #settingsDrawer {
   position: fixed;
   top: 0;
-  left: -405px;
-  width: 400px;
+  left: calc(-100% - 5px); /* Гарантированно скрывает */
+  width: clamp(280px, 80vw, 400px); /* Адаптивная ширина */
   height: 100%;
   box-sizing: border-box;
-  background: rgba(15, 15, 15, 0.849);
-  background: rgba(15, 15, 15, 0.849);
+  background: rgba(15, 15, 15, 0.85);
   box-shadow: 2px 0 5px rgba(38, 112, 182, 0.767);
   transition: left 0.3s ease;
-  z-index: 2;
-  z-index: 2;
+  z-index: 1000; /* Сделал выше, чтобы меню не уходило под другие элементы */
   padding: 20px;
 }
+
+@media (max-width: 768px) {
+  #settingsDrawer {
+    width: 68vw; /* На мобильных почти на весь экран */
+  }
+}
+
 #settingsDrawer.open {
   left: 0;
 }
@@ -608,31 +664,32 @@ span img {
   margin-right: 10px;
 }
 
-/* ===================================
-   Светлая тема
-   =================================== */
-/* Плавный переход темы */
-body {
-  transition: background 0.8s ease-in-out, color 0.5s ease-in-out;
-  position: relative;
-}
-
 /* Кнопка переключения темы */
 #themeToggle {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 2vh; /* Одинаковый отступ сверху */
+  width: 4px; /* Делаем размер одинаковым */
   background: none;
   border: none;
   cursor: pointer;
   z-index: 1000;
   transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  #themeToggle {
+    top: 2px;
+    left: 82vw;
+  }
 }
 
 #themeIcon {
-  width: 60px;
-  height: 60px;
-  transition: transform 0.5s ease-in-out;
+  width: clamp(40px, 8vw, 60px);
+  height: auto;
+  transition: transform 0.5s ease-in-out, opacity 0.2s ease-in-out;
 }
 
 /* Крутящаяся кнопка */
@@ -912,7 +969,7 @@ body {
 #themeToggle {
   position: fixed;
   top: 20px;
-  right: 20px;
+  right: 45px;
   background: none;
   border: none;
   cursor: pointer;
@@ -920,8 +977,8 @@ body {
   transition: transform 0.3s ease;
 }
 #themeIcon {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   transition: transform 0.5s ease-in-out;
 }
 .rotating {
